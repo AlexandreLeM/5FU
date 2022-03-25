@@ -123,16 +123,10 @@ server <- function(input, output) {
       carry_out() %>% 
       mrgsim(end = input$Tk0 * 2)
   })
-  
-  my_simu <- eventReactive(input$GO, {
-    My_simu <- my_est()%>%
-      augment(start = 0, delta = 0.1, end = input$TimeSimu*2,ci =TRUE,ci_method ="delta",ci_width = 95)
-  })
-    
+
   output$CV <- renderPlot({
-    shiny::req(my_est())
-    
-    My_simu <- my_est()%>%
+    my_est()
+        My_simu <- my_est()%>%
       augment(start = 0, delta = 0.1, end = input$TimeSimu,ci =TRUE,ci_method ="delta",ci_width = 95)
     
     simu <- My_simu$aug_tab
@@ -155,7 +149,7 @@ server <- function(input, output) {
   })
 
   output$newdose <- renderText({
-    shiny::req(NEWAUC())
+
     A<-NEWAUC()
     paste0("AUC estime par le modele: ", round(max(A$AUC)/1000, digit = 2), "mg/L.")
   })
