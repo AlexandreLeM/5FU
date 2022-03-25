@@ -57,12 +57,13 @@ ui <- dashboardPage(skin = "green",
   
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Estimation of 5FU exposure", tabName = "Estimation"),
+      menuItem("Estimation of 5FU IV exposure", tabName = "5FU"),
+      menuItem("Estimation of capecitabine exposure", tabName = "Cape"),
       menuItem("Info", tabName = "Info"))),
   
   dashboardBody(
     tabItems(
-      tabItem(tabName = "Estimation",
+      tabItem(tabName = "5FU",
     fluidRow(
       box(height = 600,
           title = "Molecule :",solidHeader = T,status = "success",
@@ -87,6 +88,33 @@ ui <- dashboardPage(skin = "green",
         actionButton("SimuGO", "Let's GO !"),
         verbatimTextOutput("newdose")))
   ),
+  
+  tabItem(tabName = "Cape",
+          fluidRow(
+            box(height = 600,
+                title = "Molecule :",solidHeader = T,status = "success",
+                numericInput("amt", "Dose (mg)", 4800),
+                numericInput("Tk0", "temps de perfusion", 46),
+                numericInput("DV", "Concentration mesuree en ug/L", 550),
+                numericInput("time", "temps entre le debut de la perfusion et le dosage", 8),
+                numericInput("AUC_cible", "AUC cible", 25),
+                numericInput("TimeSimu", "Temps de la simulation", 48),
+                h4("Estimation"),
+                actionButton("GO", "Let's GO !"),
+            ),
+            
+            box(
+              title = "Resultats :",solidHeader = T,status = "success",
+              plotOutput("CV"),verbatimTextOutput("results"),height = 600)),
+          
+          fluidRow(
+            box(title = "Simu",solidHeader = T,status = "success",width = 12,
+                numericInput("Newamt", "Nouvelle Dose", 5500),
+                numericInput("NewTk0", "Temps de perfusion", 46),
+                actionButton("SimuGO", "Let's GO !"),
+                verbatimTextOutput("newdose")))
+  ),
+  
   tabItem(tabName = "Info",
         box(title ="Model",solidHeader = T,status = "success",width = 12,   
             paste0("Parameter"),
